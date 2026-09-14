@@ -4,9 +4,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import logoAsset from "@/assets/DC_Logo.png.asset.json";
 import { gallery, services } from "@/lib/site-data";
 
-const nav = [
-  ["Home", "/"], ["About", "/about"], ["Services", "/services"], ["Portfolio", "/portfolio"], ["Contact", "/contact"],
-] as const;
+function NavLinks({onClick}:{onClick?:()=>void}) { return <><Link to="/" onClick={onClick}>Home</Link><Link to="/about" onClick={onClick}>About</Link><Link to="/services" onClick={onClick}>Services</Link><Link to="/portfolio" onClick={onClick}>Portfolio</Link><Link to="/contact" search={{eventType:""}} onClick={onClick}>Contact</Link></>; }
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -20,14 +18,14 @@ export function SiteHeader() {
     <div className="site-container grid h-20 grid-cols-[minmax(0,1fr)_auto] items-center gap-4 lg:h-24 lg:grid-cols-[auto_1fr_auto]">
       <Link to="/" className="brand-lockup" aria-label="Dream Corner home"><img src={logoAsset.url} alt="Dream Corner — Creating Infinite Memories" /></Link>
       <nav className="hidden items-center justify-center gap-8 lg:flex" aria-label="Main navigation">
-        {nav.map(([label,to]) => <Link key={to} to={to} className="nav-link" activeProps={{ className: "nav-link nav-link-active" }}>{label}</Link>)}
+        <Link to="/" className="nav-link" activeProps={{className:"nav-link nav-link-active"}}>Home</Link><Link to="/about" className="nav-link" activeProps={{className:"nav-link nav-link-active"}}>About</Link><Link to="/services" className="nav-link" activeProps={{className:"nav-link nav-link-active"}}>Services</Link><Link to="/portfolio" className="nav-link" activeProps={{className:"nav-link nav-link-active"}}>Portfolio</Link><Link to="/contact" search={{eventType:""}} className="nav-link" activeProps={{className:"nav-link nav-link-active"}}>Contact</Link>
       </nav>
-      <Link to="/contact" className="button-primary hidden lg:inline-flex">Plan Your Event <ArrowRight size={16}/></Link>
+      <Link to="/contact" search={{eventType:""}} className="button-primary hidden lg:inline-flex">Plan Your Event <ArrowRight size={16}/></Link>
       <button className="icon-button lg:hidden" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} onClick={() => setOpen(!open)}>{open ? <X/> : <Menu/>}</button>
     </div>
     {open && <nav className="mobile-menu lg:hidden" aria-label="Mobile navigation">
-      {nav.map(([label,to]) => <Link key={to} to={to} onClick={() => setOpen(false)}>{label}</Link>)}
-      <Link to="/contact" onClick={() => setOpen(false)} className="button-gold">Plan Your Event <ArrowRight size={16}/></Link>
+      <NavLinks onClick={() => setOpen(false)}/>
+      <Link to="/contact" search={{eventType:""}} onClick={() => setOpen(false)} className="button-gold">Plan Your Event <ArrowRight size={16}/></Link>
     </nav>}
   </header>;
 }
@@ -37,9 +35,9 @@ export function SiteFooter() {
     <div className="site-container grid gap-12 py-16 md:grid-cols-12">
       <div className="md:col-span-5"><img className="footer-logo" src={logoAsset.url} alt="Dream Corner logo"/><p className="mt-5 max-w-md text-sm leading-7 text-ivory-muted">A women-led event company creating thoughtful celebrations with premium quality, personal attention and respect for every budget.</p></div>
       <div className="grid grid-cols-2 gap-8 text-sm md:col-span-7 md:grid-cols-3">
-        <div><FooterTitle>Explore</FooterTitle>{nav.slice(1).map(([l,t]) => <Link key={t} to={t} className="footer-link">{l}</Link>)}</div>
+        <div><FooterTitle>Explore</FooterTitle><Link to="/about" className="footer-link">About</Link><Link to="/services" className="footer-link">Services</Link><Link to="/portfolio" className="footer-link">Portfolio</Link><Link to="/contact" search={{eventType:""}} className="footer-link">Contact</Link></div>
         <div><FooterTitle>Celebrations</FooterTitle>{services.slice(0,4).map(s => <Link key={s.slug} to="/services" hash={s.slug} className="footer-link">{s.title}</Link>)}</div>
-        <div><FooterTitle>Begin</FooterTitle><Link to="/contact" className="footer-link text-gold">Plan Your Event</Link><span className="footer-link">Social links coming soon</span></div>
+        <div><FooterTitle>Begin</FooterTitle><Link to="/contact" search={{eventType:""}} className="footer-link text-gold">Plan Your Event</Link><span className="footer-link">Social links coming soon</span></div>
       </div>
     </div>
     <div className="border-t border-ivory-faint"><div className="site-container flex flex-col gap-3 py-6 text-xs text-ivory-muted sm:flex-row sm:justify-between"><span>© 2026 Dream Corner. Creating Infinite Memories.</span><span><Link to="/privacy" className="hover:text-ivory">Privacy Policy</Link> · <Link to="/terms" className="hover:text-ivory">Terms &amp; Conditions</Link></span></div></div>
