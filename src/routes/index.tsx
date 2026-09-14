@@ -1,24 +1,22 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { ArrowRight } from "lucide-react";
+import { Eyebrow, GoldMotif, PortfolioGallery, SiteLayout, TemporaryImage } from "@/components/site";
+import { birthday, services, team, wedding } from "@/lib/site-data";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({ meta: [{title:"Dream Corner — Creating Infinite Memories"},{name:"description",content:"Women-led event planning and styling for thoughtful, beautifully executed celebrations."},{property:"og:title",content:"Dream Corner — Creating Infinite Memories"},{property:"og:description",content:"Premium event planning with creativity, precision and personal attention."},{property:"og:type",content:"website"},{name:"twitter:card",content:"summary_large_image"}], links:[{rel:"canonical",href:"/"}] }),
+  component: Home,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
-}
+function Home(){return <SiteLayout>
+  <section className="hero-section"><div className="site-container hero-grid"><div className="hero-copy"><Eyebrow>Dream Corner · Est. 2020</Eyebrow><h1>Creating <em>Infinite</em> Memories</h1><div className="gold-rule"/><p>From intimate gatherings to grand celebrations, we design and execute extraordinary experiences where every detail matters.</p><div className="hero-actions"><Link to="/contact" search={{eventType:""}} className="button-primary">Plan Your Event <ArrowRight size={17}/></Link><Link to="/portfolio" className="text-link">Explore Our Celebrations</Link></div></div><TemporaryImage src={wedding} alt="Temporary editorial preview of a candlelit wedding reception" eager width={1024} height={1280} className="hero-image"/><span className="scroll-note">Scroll · the next chapter</span></div></section>
+  <section className="section-dark"><div className="site-container editorial-split"><div><Eyebrow>Our approach</Eyebrow><h2>Every great celebration begins with a vision.</h2></div><div><p className="lead-light">We turn your ideas into unforgettable experiences. From weddings and traditional celebrations to birthdays, corporate events and grand launches, Dream Corner brings creativity, precision and personal attention to every occasion.</p><p className="mt-5 text-ivory-muted">Premium-quality execution meets thoughtful planning, ensuring every celebration feels special and every budget is treated with respect.</p><p className="signature">Your story. Our craft.</p></div></div></section>
+  <section className="proof-band"><div className="site-container proof-grid"><div><strong>2,000+</strong><span>Events Hosted</span></div><div><strong>6+</strong><span>Years of Experience</span></div><div><strong>5★</strong><span>Client Rating</span><small>Subject to verification</small></div></div></section>
+  <section className="section-light"><div className="site-container"><div className="section-heading"><div><Eyebrow>The world of Dream Corner</Eyebrow><h2>Celebrations, thoughtfully created.</h2></div><p>Whatever the occasion, we bring the vision, creativity and expertise to make it extraordinary.</p></div><div className="service-editorial">{services.map((s,i)=><Link key={s.slug} to="/services" hash={s.slug} className={`service-piece service-${i+1}`}><div className="service-image-wrap"><img src={s.image} alt={`Temporary preview for ${s.title}`} loading="lazy"/></div><span>{s.number}</span><h3>{s.title}</h3><p>{s.summary}</p><ArrowRight aria-hidden="true"/></Link>)}</div></div></section>
+  <section className="section-ivory"><div className="site-container editorial-split"><div><Eyebrow>Why Dream Corner?</Eyebrow><h2>More than an event. A memory in the making.</h2><GoldMotif/></div><div className="reasons">{[["Creative by nature","Unique concepts and thoughtful details that bring every celebration to life."],["Premium, without losing perspective","Beautiful execution and practical planning that respect your priorities and budget."],["Personal from start to finish","A collaborative experience where your ideas and story remain at the heart of the event."],["Women-led, people-powered","A celebration ecosystem supporting women across our team, vendors and client relationships."]].map(([t,d],i)=><article key={t}><span>0{i+1}</span><div><h3>{t}</h3><p>{d}</p></div></article>)}</div></div></section>
+  <section className="section-gallery"><div className="site-container"><div className="section-heading"><div><Eyebrow>Selected celebrations</Eyebrow><h2>Moments worth remembering.</h2></div><div><p>Explore a visual preview while authentic Dream Corner event photographs are being added.</p><Link to="/portfolio" className="text-link mt-4 inline-flex">View portfolio</Link></div></div><PortfolioGallery limit={3}/></div></section>
+  <section className="section-dark"><div className="site-container"><Eyebrow>How it unfolds</Eyebrow><h2 className="max-w-3xl">From your vision to an unforgettable celebration.</h2><div className="timeline">{[["Tell us your dream","Share your occasion, ideas, preferences and expectations."],["We plan the details","Together, we shape the concept, budget, styling and execution plan."],["We bring it to life","Our team and trusted vendors create a seamless event experience."],["You make the memories","Enjoy your celebration while we focus on every meaningful detail."]].map(([t,d],i)=><article key={t}><span>0{i+1}</span><h3>{t}</h3><p>{d}</p></article>)}</div></div></section>
+  <section className="section-light testimonial"><div className="site-container"><Eyebrow>Celebrations that speak for themselves</Eyebrow><blockquote>“A future client story will live here—shared only with their approval.”</blockquote><p>Sample placeholder · No testimonial has been attributed</p></div></section>
+  <section className="women-story"><div className="site-container grid gap-10 md:grid-cols-12 md:items-center"><TemporaryImage src={team} alt="Temporary behind-the-scenes preview of women arranging event details" className="md:col-span-6"/><div className="md:col-span-5 md:col-start-8"><Eyebrow>A women-led story</Eyebrow><h2>Celebrating women. Empowering dreams. Creating memories.</h2><p>At Dream Corner, every celebration is an opportunity to create something beautiful—not just for our clients, but for the women who help bring each experience to life.</p><p>Through our team, vendor relationships and collaborative approach, we believe in building a circle of growth, opportunity and celebration.</p></div></div></section>
+<section className="final-cta"><GoldMotif className="mx-auto"/><Eyebrow>Begin</Eyebrow><h2>Your dream event starts here.</h2><p>Life is full of reasons to celebrate. Let us make yours unforgettable.</p><Link to="/contact" search={{eventType:""}} className="button-gold">Plan Your Event <ArrowRight size={17}/></Link><Link to="/contact" search={{eventType:""}} className="text-link-light">Talk to Dream Corner</Link></section>
+</SiteLayout>}
