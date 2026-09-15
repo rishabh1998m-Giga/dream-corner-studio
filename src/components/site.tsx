@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRight, ChevronLeft, ChevronRight, Menu, X } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import logoAsset from "@/assets/DC_Logo.png.asset.json";
+import monogramAsset from "@/assets/DC_Monogram_Circle.webp";
 import { gallery, services } from "@/lib/site-data";
 
 function NavLinks({onClick}:{onClick?:()=>void}) { return <><Link to="/" onClick={onClick}>Home</Link><Link to="/about" onClick={onClick}>About</Link><Link to="/services" onClick={onClick}>Services</Link><Link to="/portfolio" onClick={onClick}>Portfolio</Link><Link to="/contact" search={{eventType:""}} onClick={onClick}>Contact</Link></>; }
@@ -16,7 +17,7 @@ export function SiteHeader() {
   }, []);
   return <header className={`site-header ${scrolled ? "site-header-scrolled" : ""}`}>
     <div className="site-container grid h-20 grid-cols-[minmax(0,1fr)_auto] items-center gap-4 lg:h-24 lg:grid-cols-[auto_1fr_auto]">
-      <Link to="/" className="brand-lockup" aria-label="Dream Corner home"><img src={logoAsset.url} alt="Dream Corner — Creating Infinite Memories" /></Link>
+      <Link to="/" className="brand-lockup" aria-label="Dream Corner home"><img src={monogramAsset} alt="Dream Corner" /></Link>
       <nav className="hidden items-center justify-center gap-8 lg:flex" aria-label="Main navigation">
         <Link to="/" className="nav-link" activeProps={{className:"nav-link nav-link-active"}}>Home</Link><Link to="/about" className="nav-link" activeProps={{className:"nav-link nav-link-active"}}>About</Link><Link to="/services" className="nav-link" activeProps={{className:"nav-link nav-link-active"}}>Services</Link><Link to="/portfolio" className="nav-link" activeProps={{className:"nav-link nav-link-active"}}>Portfolio</Link><Link to="/contact" search={{eventType:""}} className="nav-link" activeProps={{className:"nav-link nav-link-active"}}>Contact</Link>
       </nav>
@@ -45,7 +46,26 @@ export function SiteFooter() {
 }
 function FooterTitle({children}:{children:ReactNode}) { return <p className="mb-4 text-xs uppercase tracking-[0.2em] text-gold">{children}</p>; }
 
-export function SiteLayout({ children }: { children: ReactNode }) { return <div className="min-h-screen overflow-x-hidden bg-background"><SiteHeader/><main>{children}</main><SiteFooter/></div>; }
+export function SiteLayout({ children }: { children: ReactNode }) {
+  useEffect(() => {
+    const elements = Array.from(document.querySelectorAll<HTMLElement>("main section, main article, main .section-heading, main .temporary-image, main .service-piece, main .gallery-item"));
+    elements.forEach((element, index) => {
+      element.classList.add("scroll-reveal");
+      element.style.setProperty("--reveal-delay", `${Math.min(index % 4, 3) * 70}ms`);
+    });
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -6%" });
+    elements.forEach((element) => observer.observe(element));
+    return () => observer.disconnect();
+  }, []);
+  return <div className="min-h-screen overflow-x-hidden bg-background"><SiteHeader/><main>{children}</main><SiteFooter/></div>;
+}
 
 export function Eyebrow({ children, light=false }: { children: ReactNode; light?: boolean }) { return <p className={`eyebrow ${light ? "text-gold" : "text-gold"}`}>{children}</p>; }
 export function PageIntro({ eyebrow, title, copy }: { eyebrow: string; title: string; copy: string }) { return <section className="page-intro"><div className="site-container grid gap-8 md:grid-cols-12"><div className="md:col-span-8"><Eyebrow>{eyebrow}</Eyebrow><h1>{title}</h1></div><p className="md:col-span-4 md:self-end">{copy}</p></div></section>; }
